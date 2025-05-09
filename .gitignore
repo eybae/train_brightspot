@@ -1,0 +1,10 @@
+# 무시할 파일
+runs/
+*.engine
+*.onnx
+*.pt
+__pycache__/
+*.cache
+picture/
+*.png
+*.jpeg

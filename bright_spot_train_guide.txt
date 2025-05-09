@@ -1,0 +1,61 @@
+# ✅ 1. bright_spot 재학습을 위한 구성 템플릿
+
+# 📁 디렉토리 구조 예시 (YOLOv8 기준)
+# datasets/bright_spot/
+# ├── images/
+# │   ├── train/
+# │   ├── val/
+# └── labels/
+#     ├── train/
+#     ├── val/
+
+# ⚠️ Labelimg 툴을 통해 라벨링 후 저장 형식은 YOLO TXT
+# 각 라벨 파일은 다음과 같은 형식을 가짐: 
+# class_id center_x center_y width height (모두 0~1 비율)
+
+# 예: bright_spot이 class_id=0인 경우
+# 0 0.45312 0.67708 0.09583 0.14062
+
+
+# 📄 data.yaml (학습용 클래스 정의)
+# -----------------------------
+# path: datasets/bright_spot
+train: images/train
+val: images/val
+
+nc: 1
+names: ["bright_spot"]
+# -----------------------------
+
+# ✅ tip: 추후 Person이나 Car와 함께 학습할 경우
+# names: ["person", "car", ..., "bright_spot"]
+# 라벨링 시 bright_spot은 class_id=10 이상으로 설정 요망
+
+
+# 📄 train.py 예시 (YOLOv8 CLI 기반)
+# -- 설치: pip install ultralytics --
+# -- 실행 예시 --
+# ultralytics YOLOv8 train script
+
+from ultralytics import YOLO
+
+model = YOLO('yolov8n.yaml')  # or yolov8s.yaml, yolov8m.yaml etc.
+model.train(
+    data='data.yaml',
+    epochs=100,
+    imgsz=640,
+    batch=16,
+    name='bright_spot_yolov8',
+    project='runs/train',
+    workers=4,
+    device=0  # Jetson Orin에서는 0 (GPU)
+)
+
+# 결과는 runs/train/bright_spot_yolov8/ 아래에 저장됨
+
+# ✅ TIP:
+# - val set에 야간 전조등 이미지 포함 필수
+# - 다양한 각도, 거리, 하향광 상태 반영
+# - class imbalance 방지 위해 데이터 증강 활용
+# - 이미지 수 부족 시 `albumentations` 패키지 활용 가능
+

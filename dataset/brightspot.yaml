@@ -1,0 +1,6 @@
+path: /home/esls/Dev/train_brightspot/dataset
+train: images/train
+val: images/val
+
+names:
+  0: bright_spot
